@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Cake</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body class="bg-light" onclick="start()">
+    <div id="splash">
+        Click to start! <br>
+        Get Ready My 傻Gi B <3 <br>
+        開聲~~~~
+    </div>
+    <audio id="birthday-song" src="{{ url_for('static', filename='audio/happy-birthday.mp3') }}" loop></audio>
+    <div class="container text-center">
+        <img src="{{ url_for('static', filename='images/cake.png') }}" alt="Cake" class="cake-img">
+        <div id="letter" class="letter-box" style="display: none;">
+            <p id="letter-text"></p>
+        </div>
+        <h1 id="happy-birthday" style="display: none;">Happy Birthday!</h1>
+        <a href="/album" id="album-btn" class="btn btn-primary mt-3" style="display: none;">View Album</a>
+    </div>
+    <div class="character left-character">
+        <img src="{{ url_for('static', filename='images/character_head1.png') }}" alt="Character Head" class="character-head">
+    </div>
+    <div class="character right-character">
+        <img src="{{ url_for('static', filename='images/character_head2.png') }}" alt="Character Head" class="character-head">
+    </div>
+</body>
+</html>

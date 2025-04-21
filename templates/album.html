@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Album</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body class="bg-light album-page">
+    <h1>Our Memories</h1>
+    <div class="wrapper">
+        <div class="holder">
+            <audio controls id="songforyou" src="{{ url_for('static', filename='audio/songforyou.mp3') }}"></audio>
+        </div>
+    </div>
+    <div class="container text-center">
+        Click to Zoom-in (Birthday Edition)
+        <div id="album" class="album">
+            <div class="page" id="page-1">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo1.jpg') }}" alt="Photo 1" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo1.jpg') }}">
+                    <div class="photo-caption" data-caption="我地第一次既見面亦都係我地第一次行山hehe~當時你話綑邊我係有啲淆，好好地行山會唔會死架，仲要係上網見到有人因為綑邊香左。(最緊要身邊無人咁玩)但係我又好想去試下...咁就照去啦。雖然最後都綑唔到邊，我都有啲relief既感覺。但總覺得好似幾好玩，真係有啲想玩下。下次陪我玩啊~我都係第一次去白腊，真係好靚，多謝你帶左我黎依到。希望之後我地可以行多啲山！行曬香港所有既山！！因為唔識擺pose~所以亂咁黎XD"></div>
+                </div>
+            </div>
+            <div class="page" id="page-2" style="display: none;">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo2.jpg') }}" alt="Photo 2" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo2.jpg') }}">
+                    <div class="photo-caption" data-caption="我地第一次去露營~真係第一次同expert露營感覺好唔同~我拎勁多野，之後你話我XD。因為身邊太少人去露營，所以我都會盡量買大大份，可以同其他人一齊share。但同你露營完之後我都想試下玩ultra light玩走露，原本都想係依個復活節假玩兩日一夜，但係個天氣真係好差又熱。有啲怕一黎體驗太差，之後唔想再玩XD。我記得仲係第一次咩你，都幾搞笑。亦都第一次聽到有女仔訓教有鼻鼾聲XD勁cute又幾好聽。我係側邊聽聽下都訓著左。好可惜依一次煮飯有啲失敗，下次一定會煮得勁好既野比你食!!仲玩左個心理Test，我就係一個松鼠，我會繼續係你身邊轉來轉去架XD"></div>
+                </div>
+            </div>
+            <div class="page" id="page-3" style="display: none;">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo3.jpg') }}" alt="Photo 3" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo3.jpg') }}">
+                    <div class="photo-caption" data-caption="我地第一次去睇電影~其實有啲後悔睇依套XD~真係可惜睇唔到哈爾，不過幾shit相信再多段時間都會覺得依個經歷幾好笑，最緊要係興幸有你陪。真係邊有人第一次約女仔去睇電影，去睇明知係伏既電影，最癲仲要睇IMAX。正常人都應該係睇啲浪漫啲既電影啊，或者我地兩個人都唔係正常人啊XD。咁希望我地可以繼續傻傻奸奸開開心心去過日子XD。睇下遲啲哈爾會唔會再上，到時我地再去睇啦~"></div>
+                </div>
+            </div>
+            <div class="page" id="page-4" style="display: none;">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo4.jpg') }}" alt="Photo 4" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo4.jpg') }}">
+                    <div class="photo-caption" data-caption="我第一次睇Coldplay演唱會，真係完成左我細細個既夢想。我好鐘意佢好多既歌~Yellow,The Scientist, Fix You, In My Place等等~其實一開始聽果陣，總係覺得好似去左教會咁，係到宣傳愛與和平，不過唔好諗咁多，去感受真係好正!!希望下次如果仲有Coldplay演唱會，或者其他演唱會，我地都可以一齊去，去feel下個氣氛！好想比你感受下當時既氣氛~所以最後拎左個眼鏡比你睇下~Look At The Stars, Look How They Shine For You!"></div>
+                </div>
+            </div>
+            <div class="page" id="page-6" style="display: none;">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo5.jpg') }}" alt="Photo 6" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo5.jpg') }}">
+                    <div class="photo-caption" data-caption="第一次食你整既野~你個牛丸大魔王，真係估唔到有女仔咁鐘意食丸類。雖然只係一碗平平無奇既一碗野，但都係覺得幾好食同埋好似又了解你多左咁。"></div>
+                </div>
+            </div>
+            <div class="page" id="page-5" style="display: none;">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo6.jpg') }}" alt="Photo 5" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo6.jpg') }}">
+                    <div class="photo-caption" data-caption="記得依一日，係因為你想去GAY BAR，超級可惜我之前去果間執左。果間好feel勁多。仲記得因為你好驚，唔敢入。最後我特登去呃你，令你可以拖住我隻手，一齊入去。或者可能係星期日，無咁有feel。下次我地星期六去，咁就應該會有FEEL啦XD！之後我地仲去個好靚又好飲既BAR，去飲酒，去傾下計，講下你有幾多人追求，作為其中一個追求者，正所知己知彼百戰百勝嘛。之後我地再去左係街到飲，飲左兩罐啤酒。原本飲一罐我都頂得順，結果你話要再飲多罐，OKAY黎啦。之後我真係feel到我真係行唔到直路~亦都係人生第一次心跳到CLS~跑步都未必去到既心跳。飲完酒，令我更加有勇氣，想講出我心中既說話，好似比你知我心入面既感覺。"></div>
+                </div>
+            </div>
+            <div class="page" id="page-7" style="display: none;">
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='images/photo7.jpg') }}" alt="Photo 7" class="album-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-src="{{ url_for('static', filename='images/photo7.jpg') }}">
+                    <div class="photo-caption" data-caption="第一次渣車去機場接人~終於比我等到你返黎~當你唔係香港果陣先發現我係有幾掛住你Crazy~當思念一個人原來都幾辛苦XD，當我好掛住你果陣，係到諗我有咩可以做呢？我就開始彈下吉他去舒發下自己既感受，彈彈下搵到首歌NothingGonnaChangeMyLoveForYou.一到彈一到唱，發現好有FEEL，啲歌詞都好岩。係到彈住唱住喊住係咁掛住你咁~CRAZY。之後就勁想可以當你返到黎香港既果一刻，就可以第一時間見到你。所以我瘋狂操車，希望我可以第一時間見到你，同埋可以安全送你歸家！亦都因為今次我既渣車既skill又勁左好多，之後我地一齊游車河去影相，再玩車camp，諗起都開心！"></div>
+                </div>
+            </div>
+            <div class="page" id="page-8" style="display: none;">
+                <div class="photo-caption" data-caption="其實仲有好多圖例如我地去跑步，行山，行公園，坐船之類。但係依一版並無其他圖~因為我想講係依版既圖~將會係我地之後一齊經歷的相~祝你每一年都咁快樂~希望我能夠係你身邊~保護你守護住你既笑容~梁鍩澄生日快樂啊！！"></div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button id="prev-page" class="btn btn-secondary">Previous Page</button>
+            <button id="next-page" class="btn btn-secondary">Next Page</button>
+            <p></p>
+            <a href="/cake" class="btn btn-primary back-btn">Back to Cake</a>
+        </div>
+    </div>
+    <div class="character left-character">
+        <img src="{{ url_for('static', filename='images/character_head1.png') }}" alt="Character 1 Head" class="character-head">
+    </div>
+    <div class="character right-character">
+        <img src="{{ url_for('static', filename='images/character_head2.png') }}" alt="Character 2 Head" class="character-head">
+    </div>
+
+    <!-- Modal for enlarged image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modal-image" src="" alt="Enlarged Photo" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

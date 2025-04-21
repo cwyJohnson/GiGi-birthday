@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Quiz</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body class="bg-light">
+    <canvas id="fireworksCanvas" style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div id="congrats" class="congrats-message" style="display: none;">識啲野 似係本人</div>
+        <div class="card p-4 shadow question-container" id="question-1">
+            <h2 class="text-center">Question 1/3</h2>
+            <p class="text-center">壽星婆最鐘意咩顏色呢?</p>
+            <div class="error text-danger text-center" style="display: none;"></div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="blue" id="q1-blue" required>
+                    <label class="form-check-label" for="q1-blue">藍色</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="red" id="q1-red">
+                    <label class="form-check-label" for="q1-red">紅色</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="green" id="q1-green">
+                    <label class="form-check-label" for="q1-green">綠色</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="yellow" id="q1-yellow">
+                    <label class="form-check-label" for="q1-yellow">黃色</label>
+                </div>
+            </div>
+            <button class="btn btn-primary w-100 submit-btn">Submit</button>
+        </div>
+        <div class="card p-4 shadow question-container" id="question-2" style="display: none;">
+            <h2 class="text-center">Question 2/3</h2>
+            <p class="text-center">壽星婆最鐘意咩食物呢?</p>
+            <div class="error text-danger text-center" style="display: none;"></div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="麵包" id="q2-cat" required>
+                    <label class="form-check-label" for="q2-cat">麵包</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="水餃" id="q2-dog">
+                    <label class="form-check-label" for="q2-dog">水餃</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="壽司" id="q2-bird">
+                    <label class="form-check-label" for="q2-bird">壽司</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="口水雞" id="q2-fish">
+                    <label class="form-check-label" for="q2-fish">口水雞</label>
+                </div>
+            </div>
+            <button class="btn btn-primary w-100 submit-btn">Submit</button>
+        </div>
+        <div class="card p-4 shadow question-container" id="question-3" style="display: none;">
+            <h2 class="text-center">Question 3/3</h2>
+            <p class="text-center">壽星公係Chiikawa入面最鐘意邊個角色呢?</p>
+            <div class="error text-danger text-center" style="display: none;"></div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="Chiikawa" id="q3-june" required>
+                    <label class="form-check-label" for="q3-june">Chiikawa</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="小八" id="q3-march">
+                    <label class="form-check-label" for="q3-march">小八</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="兔兔" id="q3-september">
+                    <label class="form-check-label" for="q3-september">兔兔</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answer" value="小桃" id="q3-december">
+                    <label class="form-check-label" for="q3-december">小桃</label>
+                </div>
+            </div>
+            <button class="btn btn-primary w-100 submit-btn">Submit</button>
+        </div>
+    </div>
+</body>
+</html>
