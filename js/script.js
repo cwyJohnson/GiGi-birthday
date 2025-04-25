@@ -219,7 +219,7 @@ $(document).ready(function() {
 
     // Album page flip and caption animation
     let currentPage = 1;
-    const totalPages = 8;
+    const totalPages = 9;
 
     function animateCaptions(pageId) {
         // Reset captions for all pages
