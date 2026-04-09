@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GiGi Birthday - Game</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(135deg, #ffe4f0, #fff0f8);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        .container {
+            max-width: 900px;
+            margin: 15px auto;
+            padding: 10px;
+        }
+        h1 { 
+            color: #d63384; 
+            font-size: 2.3em; 
+            margin-bottom: 8px; 
+        }
+        .subtitle { color: #6f42c1; font-size: 1.1em; }
+
+        #password-screen {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 35px 20px;
+            max-width: 420px;
+            margin: 0 auto;
+            width: 95%;
+        }
+        #password-screen input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.25em;
+            border: 2px solid #d63384;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        #password-screen button {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.25em;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+        }
+        #error-msg { 
+            color: #dc3545; 
+            font-weight: bold; 
+            margin-top: 12px;
+            min-height: 1.2em;
+        }
+
+        #game-area { 
+            display: none; 
+            position: relative; 
+        }
+        canvas {
+            border: 8px solid #d63384;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        #countdown {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5.5em;
+            font-weight: bold;
+            color: #d63384;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        #win-screen, #lose-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.82);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            z-index: 100;
+            padding: 20px;
+        }
+        .win-character {
+            width: 200px; 
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 40px #ff99cc;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .win-character img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        button {
+            margin: 10px 8px;
+            background: #6f42c1;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.25em;
+            border-radius: 12px;
+            cursor: pointer;
+            min-width: 160px;
+        }
+        #lose-screen button {
+            background: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GiGi Birthday Game 🎉</h1>
+        <p class="subtitle">輸入密碼進入遊戲</p>
+
+        <!-- 密碼畫面 -->
+        <div id="password-screen">
+            <input type="password" id="password-input" placeholder="輸入密碼" maxlength="8">
+            <button onclick="checkPassword()">確認</button>
+            <div id="error-msg"></div>
+        </div>
+
+        <!-- 遊戲區域 -->
+        <div id="game-area">
+            <audio id="bg-music" loop>
+                <source src="{{ url_for('static', filename='audio/birthdaysongforbbchu.m4a') }}" type="audio/mpeg">
+            </audio>
+            <audio id="flap-sound">
+                <source src="{{ url_for('static', filename='audio/bbchu.m4a') }}" type="audio/mpeg">
+            </audio>
+            <canvas id="game-canvas" width="800" height="500"></canvas>
+            <div id="countdown"></div>
+        </div>
+    </div>
+
+    <!-- 勝利畫面（👧 已改為 PNG 圖片） -->
+    <div id="win-screen">
+        <h2>🎉 恭喜完成遊戲！</h2>
+        <div class="win-character" onclick="celebrateWin()">
+            <img id="win-character-img" src="{{ url_for('static', filename='images/target.png') }}" alt="GiGi">
+        </div>
+        <button onclick="goToNextPage()">前往下一個頁面</button>
+        <button onclick="restartGame()">再玩一次</button>
+    </div>
+
+    <!-- 失敗畫面 -->
+    <div id="lose-screen">
+        <h2>💥 碰撞了！</h2>
+        <p style="font-size:1.2em; margin:15px 0;">不要灰心，再試一次吧～</p>
+        <button onclick="restartGame()">重新開始</button>
+    </div>
+
+    <script>
+        // ==================== 密碼驗證 ====================
+        function checkPassword() {
+            const input = document.getElementById('password-input').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (input === '20250502') {
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('game-area').style.display = 'block';
+                document.getElementById('bg-music').play().catch(() => {});
+                startCountdown();
+            } else {
+                errorMsg.textContent = '❌ 密碼錯誤，請重新輸入';
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // ==================== 3秒倒數 ====================
+        function startCountdown() {
+            const countdownEl = document.getElementById('countdown');
+            let count = 3;
+            countdownEl.style.display = 'block';
+            countdownEl.textContent = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownEl.textContent = count;
+                } else {
+                    clearInterval(timer);
+                    countdownEl.textContent = 'Go!';
+                    setTimeout(() => {
+                        countdownEl.style.display = 'none';
+                        startGame();
+                    }, 600);
+                }
+            }, 1000);
+        }
+
+        // ==================== 遊戲邏輯（鳥 + 目標 + 背景皆使用圖片） ====================
+        let canvas, ctx, birdImg, targetImg, bgImg;
+        let bird, gravity, flapStrength, pipes, pipeWidth, pipeGap, pipeSpeed;
+        let gameRunning = false, gameTime = 0, startTime = 0;
+        let flapSound, bgMusic;
+
+        function startGame() {
+            canvas = document.getElementById('game-canvas');
+            ctx = canvas.getContext('2d');
+            flapSound = document.getElementById('flap-sound');
+            bgMusic = document.getElementById('bg-music');
+
+            bgImg = new Image();
+            birdImg = new Image();
+            targetImg = new Image();
+
+            bgImg.src = "{{ url_for('static', filename='images/east.jpg') }}";
+            birdImg.src = "{{ url_for('static', filename='images/cutie.png') }}";
+            targetImg.src = "{{ url_for('static', filename='images/target.png') }}";
+
+            bird = { x: 150, y: 250, width: 64, height: 56, velocity: 0 };
+            gravity = 0.2;
+            flapStrength = -5.5;
+
+            pipeWidth = 80;
+            pipeGap = 380;
+            pipeSpeed = 1.2;
+
+            pipes = [];
+            gameRunning = true;
+            gameTime = 0;
+            startTime = Date.now();
+
+            createPipe();
+
+            const flapFunc = (e) => {
+                if (!gameRunning) return;
+                bird.velocity = flapStrength;
+                flapSound.currentTime = 0;
+                flapSound.play().catch(() => {});
+            };
+
+            canvas.addEventListener('mousedown', flapFunc);
+            canvas.addEventListener('touchstart', flapFunc);
+            window.addEventListener('keydown', e => {
+                if (e.key === ' ' && gameRunning) { e.preventDefault(); flapFunc(); }
+            });
+
+            let loaded = 0;
+            const checkLoaded = () => {
+                loaded++;
+                if (loaded === 3) requestAnimationFrame(gameLoop);
+            };
+            bgImg.onload = checkLoaded;
+            birdImg.onload = checkLoaded;
+            targetImg.onload = checkLoaded;
+        }
+
+        function createPipe() {
+            const minHeight = 50;
+            const maxHeight = canvas.height - pipeGap - minHeight;
+            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight)) + minHeight;
+            pipes.push({ x: canvas.width + 50, top: topHeight });
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            gameTime = (Date.now() - startTime) / 1000;
+            if (gameTime > 15) { endGame(true); return; }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (bgImg.complete) {
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+            } else {
+                const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                bg.addColorStop(0, '#fff0f8'); bg.addColorStop(1, '#ffe4f0');
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            if (birdImg.complete) {
+                ctx.drawImage(birdImg, bird.x - bird.width/2, bird.y - bird.height/2, bird.width, bird.height);
+            }
+
+            bird.velocity += gravity;
+            bird.y += bird.velocity;
+
+            if (bird.y + bird.height/2 > canvas.height - 30) {
+                endGame(false);
+                return;
+            }
+
+            if (Math.random() < 0.012) createPipe();
+
+            for (let i = 0; i < pipes.length; i++) {
+                const p = pipes[i];
+                p.x -= pipeSpeed;
+
+                ctx.fillStyle = '#4caf50';
+                ctx.fillRect(p.x, 0, pipeWidth, p.top);
+                ctx.fillRect(p.x, p.top + pipeGap, pipeWidth, canvas.height);
+
+                if (bird.x + bird.width/2 > p.x && bird.x - bird.width/2 < p.x + pipeWidth &&
+                    (bird.y - bird.height/2 < p.top || bird.y + bird.height/2 > p.top + pipeGap)) {
+                    endGame(false);
+                    return;
+                }
+            }
+
+            if (pipes.length > 0 && pipes[0].x < -pipeWidth) pipes.shift();
+
+            if (targetImg.complete) {
+                ctx.drawImage(targetImg, 680 - 50, 250 - 50, 100, 100);
+            }
+
+            const dx = bird.x - 680;
+            const dy = bird.y - 250;
+            if (Math.sqrt(dx*dx + dy*dy) < 55) {
+                endGame(true);
+                return;
+            }
+
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 32px Arial';
+            ctx.fillText(`時間: ${gameTime.toFixed(1)} 秒`, 30, 60);
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGame(isWin) {
+            gameRunning = false;
+            if (isWin) {
+                document.getElementById('win-screen').style.display = 'flex';
+            } else {
+                document.getElementById('lose-screen').style.display = 'flex';
+            }
+        }
+
+        function restartGame() {
+            document.getElementById('win-screen').style.display = 'none';
+            document.getElementById('lose-screen').style.display = 'none';
+            document.getElementById('countdown').style.display = 'block';
+            startCountdown();
+        }
+
+        function goToNextPage() {
+            window.location.href = '/birthdaypage';
+        }
+
+        function celebrateWin() {
+            alert('🎂 恭喜您成功找到 GiGi！\n\n遊戲完成～');
+        }
+    </script>
+</body>
+</html>

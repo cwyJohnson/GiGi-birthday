@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Gigi!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scriptv2.js') }}"></script>
+    <style>
+        :root {
+            --primary-pink: #ff85a2;
+            --soft-pink: #fbb1bd;
+            --gold: #ffd700;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #fef1f2 0%, #fae8ff 100%);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            color: #4a4a4a;
+        }
+
+        /* 背景氣球動畫 */
+        .balloon {
+            position: fixed;
+            bottom: -100px;
+            width: 40px;
+            height: 50px;
+            background: var(--soft-pink);
+            border-radius: 50%;
+            animation: float up 8s infinite ease-in;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        @keyframes up {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* 標題與照片區 */
+        .container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--primary-pink);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: heartBeat 2s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .photo-section {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .photo-frame {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: #eee;
+            transition: transform 0.3s;
+        }
+
+        .photo-frame:hover {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 生日蛋糕 */
+        .cake {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            background: #f4d03f;
+            margin: 10px auto;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cake::after {
+            content: '';
+            position: absolute;
+            top: 20px; left: 0;
+            width: 200px; height: 30px;
+            background: #e67e22;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 40px;
+            background: #3498db;
+            cursor: pointer;
+        }
+
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 20px;
+            background: var(--gold);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px var(--gold);
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            from { opacity: 0.8; transform: translateX(-50%) scale(1); }
+            to { opacity: 1; transform: translateX(-50%) scale(1.1); }
+        }
+
+    </style>
+</head>
+<body class="bg-light album-page" onclick="start()">
+    <div id="splash">
+        Click to start! <br>
+        Get Ready My 鍩澄BBchu <3 <br>
+        開聲~~~~
+    </div>
+    <div class="container">
+        <h1>Happy Birthday, Gigi! 🎂</h1>
+        
+        <div class="photo-section">
+            <!-- 這裡放入妳們的照片連結 -->
+            <div class="photo-frame">
+                <img src="/static/images/boy.jpg" alt="Gigi Photo 1" id="img1">
+            </div>
+            <div class="photo-frame">
+                <img src="/static/images/girl.jpg" alt="Gigi Photo 2" id="img2">
+            </div>
+        </div>
+        <audio id="birthday-song" src="{{ url_for('static', filename='audio/birthdaysong.mp3') }}" loop></audio>
+        <div class="cake">
+            <div class="candle" onclick="extinguish()">
+                <div class="flame" id="flame"></div>
+            </div>
+        </div>
+        <p style="font-size: 1.2rem;">祝全世界最靚嘅 Gigi 生日快樂，日日都咁開心！</p>
+        <div id="letter" class="letter-box" style="display: none;">
+            <p id="letter-text"></p>
+        </div>
+        <a href="/albumv2" id="album-btn" class="btn btn-primary mt-3" style="display: none;">View Album</a>
+    </div>
+    
+    <div class="character left-character">
+        <img src="{{ url_for('static', filename='images/captainB.png') }}" alt="Character 1 Head" class="character-head">
+    </div>
+    <div class="character right-character">
+        <img src="{{ url_for('static', filename='images/captainchu.png') }}" alt="Character 2 Head" class="character-head">
+    </div>
+
+    <script>
+        // 自動生成背景氣球
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+            balloon.style.left = Math.random() * 100 + 'vw';
+            balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 80%)`;
+            balloon.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            document.body.appendChild(balloon);
+            setTimeout(() => balloon.remove(), 8000);
+        }
+        setInterval(createBalloon, 800);
+
+        // 吹熄蠟燭功能
+        function extinguish() {
+            const flame = document.getElementById('flame');
+            flame.style.display = flame.style.display === 'none' ? 'block' : 'none';
+            if(flame.style.display === 'none') {
+                alert("許個願吧！願望一定會實現的 ✨");
+            }
+        }
+
+    </script>
+</body>
+</html>
